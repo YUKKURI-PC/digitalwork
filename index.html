@@ -1,0 +1,875 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>でじたるわーく</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+			:root {
+  --main-text: #333;
+  --main-bg: #f4f4f4;
+  --main-btn: #F2F2F2;	
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --main-text: #ddd;
+    --main-bg: #333;
+  --main-btn: #F2F2F2;	
+	  --main-btn: #6e6e6e;				
+  }
+}
+ 
+            body{
+                 font-family: Arial, sans-serif;
+  color: var(--main-text);
+  background-color: var(--main-bg);
+  transition: .5s;
+            margin: 0;
+            }
+            header{
+        background-color: rgb(0 0 106 / 61%);
+        backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+        color:#fff;
+ position: fixed;
+  top: 0;
+  z-index: 999;
+  width: 100%;
+  height: 70px;
+  z-index: 999;
+            display: flex;
+    align-items: center;
+        　　box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.25);
+            }
+            main {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        margin-top: 70px;
+ }
+			button {
+  color: var(--main-text);
+  background-color: var(--main-btn) !important;
+  transition: .3s;
+				max-width:80%;
+				border: none !important;
+				  outline: none;
+			}
+			button:hover {
+				background-color:#A4A4A4 !important;
+				color:#fff !important;
+			}
+.header-content {
+    display: flex;
+}
+
+.title {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.update-date {
+    margin: 0;
+    font-size: 0.9em;
+        padding-top:5px;
+}
+        .screen {
+            text-align: center;
+								
+        }
+
+        .quiz-container, .screen button {
+            background-color: #fff;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .choices button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            background-color: #ddd;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .choices button:hover {
+            background-color: #ccc;
+        }
+
+        #next-btn {
+            margin-top: 20px;
+            padding: 20px 30px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #next-btn:hover {
+            background-color: #218838;
+        }
+
+        #result-container {
+            margin-top: 20px;
+            font-size: 18px;
+            color: white;
+        }
+
+        #result-container img {
+            width: 100px;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        #result-screen p {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .choice.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        #score-chart {
+            max-width: 100%;
+            max-height: 400px;
+            width: 100%;
+            height: 100%;
+        }
+
+        #progress-bar-container {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: #28a745;
+            border-radius: 5px;
+        }
+
+        #progress-info {
+            margin-left: 10px;
+            font-size: 18px;
+        }
+			#question {
+				max-width:80%;
+			}
+			#answersection {
+				  color: var(--main-text);
+			      background-color: var(--main-bg);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px; /* 好みの幅 */
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* 他の要素の上に表示するため */
+				  display:none;
+                  border-radius: 10px;
+			}
+			#answerbg{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 背景を半透明に */
+  z-index: 999;
+				display:none;
+			}
+			/* リセットCSS */
+* {
+  list-style: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* アコーディオンメニュー全体のサイズ・位置 */
+.ac {
+  width: 50vh;
+  max-width: 600px;
+  margin: 0 auto;
+  margin-top:30%;
+}
+
+/* クリック領域 */
+.ac-parent {
+  height: 50px;
+  border-bottom: 1px solid #fff;
+  text-align: center;
+  line-height: 50px;
+  cursor: pointer;
+}
+
+/* クリックしたら表示される領域 */
+.ac-child {
+  display: none;
+  text-align: center;
+}
+      .ac-parent {
+	position: relative;  /* 追加 */
+	height: 50px;
+	border-bottom: 1px solid #fff;
+	text-align: center;
+	line-height: 50px;
+	cursor: pointer;
+}
+
+/* ①プラスの横線 */
+.ac-parent:before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: 8px;
+	width: 24px;
+	height: 2px;
+	background: #f4f4f4;
+	transform: translateY(-50%);
+}
+
+/* ②プラスの縦線 */
+.ac-parent:after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	/* 8px+12px-1px(幅2pxの半分) */
+	right: 19px;
+	width: 2px;
+	height: 24px;
+	background: #f4f4f4;
+	transform: translateY(-50%);
+	transition: .3s;
+}
+
+/* ③オープン時にopenクラスを付与（縦線を回転させて非表示に） */
+.ac-parent.open:after {
+	top: 25%;
+	opacity: 0;
+	transform: rotate(90deg);
+}
+			
+			.btn_menu{
+				  border-bottom: 0px solid #fff !important;
+				width:100% !important;
+				margin:0 !important;
+				margin-top:0 !important;
+				border-radius:0 !important;
+				box-shadow:0 0 0px !important;
+				border: none;
+				
+			}
+			li{
+				border: none;
+			}
+			a {
+  color: var(--main-text);
+}
+
+.no-underline {
+  text-decoration: none;
+}
+			.result{
+				text-align:center;
+				justify-content: center;
+			}
+			
+			
+    </style>
+</head>
+<body>
+      <header>
+        <div class="header-content">
+            <h1 id="quiz-subject" class="title">&nbsp;でじたるわーく</h1>&nbsp;    
+            <p class="update-date">&nbsp;Ver1.0 Preview Beta3</p>
+        </div>
+    </header>
+        <main>
+    <div id="home-container" class="screen">
+			<dl class="ac">
+    <dt class="ac-parent" style="background-color:#f97148 !important;color:#fff !important;">歴史</dt>
+				<dd class="ac-child"><ui style="background-color:#6e6e6e">
+				<li><button onclick="selectSubject('人類の出現と文明の起こり')" class="btn_menu">人類の出現と文明の起こり</button></li>
+				<li> <button onclick="selectSubject('人類の出現と文明の起こり2')" class="btn_menu">人類の出現と文明の起こり2</button></li>
+				<li><button onclick="selectSubject('縄文弥生')" class="btn_menu">縄文時代~弥生時代</button></li>
+				<li><button onclick="selectSubject('古墳飛鳥')" class="btn_menu">古墳時代~飛鳥時代</button></li>
+				<li> <button onclick="selectSubject('奈良')" class="btn_menu">奈良時代</button></li>
+				<li>  <button onclick="selectSubject('平安')" class="btn_menu">平安時代</button></li>
+				<li> <button onclick="selectSubject('鎌倉')" class="btn_menu">鎌倉時代</button></li></ui></dd>
+    <dt class="ac-parent" style="background-color:#04B404 !important;color:#fff !important;">地理</dt>
+    <dd class="ac-child">追加予定</dd>
+    <dt class="ac-parent" style="background-color:#8904B1 !important;color:#fff !important;">理科</dt>
+    <dd class="ac-child">追加予定</dd>
+    <dt class="ac-parent" style="background-color:#FE2E2E !important;color:#fff !important;">国語</dt>
+    <dd class="ac-child">追加予定</dd>
+				<dt class="ac-parent" style="background-color:#DF7401 !important;color:#fff !important;">数学</dt>
+    <dd class="ac-child">追加予定</dd>
+				<dt class="ac-parent" style="background-color:#DF01D7 !important;color:#fff !important;">English</dt>
+    <dd class="ac-child">More to come</dd>
+								<dt class="ac-parent" style="background-color:#333 !important;color:#fff !important;">技術・家庭</dt>
+    <dd class="ac-child">追加予定</dd>
+				<dt class="ac-parent">このサイトについて</dt>
+    <dd class="ac-child">
+				<br>
+				<h4>でじたるわーく</h4><br>
+				<a>Ver1.0 Preview Beta3</a><br><br>
+				<a>不具合修正・UI変更を行いました。</a><br><br>
+				<a href="https://forms.gle/FWNhhseGVFSePsxWA">不具合の報告↗︎</a><br><br>
+				<a>©︎ Hayato</a><br>
+				<a>©︎ Straight SNS Gloup</a><br>
+				<br>
+				</dd>
+  </dl>
+
+    </div>
+
+    <div id="subject-container" class="screen" style="display:none;">
+			<br>
+        <h1 id="subject-title">選択した教科</h1>
+        <div id="unit-buttons"></div>
+    </div>
+
+ <div id="quiz-container" class="screen" style="display:none;margin-top:5%;">
+    <div id="question-container">
+						<center>
+        <h2 id="question">問題が正常に読み込まれませんでした。やり直してください。</h2>
+        <div class="choices">
+            <button class="choice" onclick="checkAnswer(0)">選択肢1</button>
+            <button class="choice" onclick="checkAnswer(1)">選択肢2</button>
+            <button class="choice" onclick="checkAnswer(2)">選択肢3</button>
+            <button class="choice" onclick="checkAnswer(3)">選択肢4</button>
+					
+        </div>
+				</center>
+    </div>
+			<div id="answerbg">
+			<div id="answersection">
+							<center>
+			<img id="result-image" style="display:none; width: 100px; height: 100px;text-align:center;" />
+<audio id="result-sound"></audio>
+			</center>
+    <div id="result-container"></div>
+			<center><button id="next-btn" onclick="nextQuestion()">次へ＞</button></center>
+				</div>
+				</div>
+    <button id="show-answer-btn" onclick="showAnswer()">答えを表示する</button>
+			    <button id="show-result-btn" onclick="confirmShowResult()">レッスンを終了</button>
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+        <div id="progress-info">残り <span id="remaining-questions">0</span> 問</div>
+    </div>
+</div>
+
+
+    <div id="result-screen" class="screen" style="display:none;">
+        <h1>結果</h1>
+        <canvas id="score-chart" width="400" height="400"></canvas>
+        <p id="score">正解率: 0%</p>
+        <button id="retry-btn" onclick="retryIncorrect()">不正解のみやり直し</button>
+        <button onclick="goBackToTop()">トップに戻る</button>
+    </div>
+
+<script>
+let currentSubject = '';
+let currentQuiz = '';
+let currentQuestion = 0;
+let correctAnswers = 0;
+let incorrectQuestions = [];
+let isRetrying = false;
+let chartInstance = null;
+
+const questions = {
+          "人類の出現と文明の起こり": [
+        {
+            question: "最も古い人類である猿人は、どこの大陸で生まれた？",
+            choices: ["ユーラシア大陸", "アフリカ大陸", "北アメリカ大陸", "オーストラリア大陸"],
+            correct: 1
+        },
+        {
+            question: "打製石器を使って狩りや採集を行なっていた時代を何と言う？",
+            choices: ["猿人時代", "石器時代", "旧石器時代", "縄文時代"],
+            correct: 2
+        },
+        {
+            question: "煮たり蓄えたりするための道具を何と言う？",
+            choices: ["土偶", "バケツ", "器", "土器"],
+            correct: 3
+        },
+              {
+            question: "メソポタミア文明で発見された文字の名前は？",
+            choices: ["くさび形文字", "象形文字", "インダス文字", "甲骨文字"],
+            correct: 0
+        },
+                    {
+            question: "メソポタミア文明で発明された月の満ち欠けに基づいた暦を何という？",
+            choices: ["太陽暦", "和暦", "太陰暦", "西暦"],
+            correct: 2
+        },
+                          {
+            question: "(A)の近くにエジプト文明、(B)の近くにメソポタミア文明、(C)の近くにインダス文明ができた。",
+            choices: ["A:ナイル川B:インダス川C:ユーフラテス川", "A:ナイル川B:ユーフラテス川C:インダス川", "A:ユーフラテス川B:ナイル川C:インダス川", "A:インダス文明B:ユーフラテス川C:ナイル川"],
+            correct: 1
+        },
+                          {
+            question: "日本列島に人類が移り住んできたのはいつ？",
+            choices: ["4万9千年前", "5万1千年前", "3万8千年", "3万2千年前"],
+            correct: 2
+        },
+                          {
+            question: "日本列島に人類が移り住んできたのは何大陸より早い？",
+            choices: ["ヨーロッパ", "北アメリカ", "南アメリカ", "オーストラリア"],
+            correct: 1
+        }
+    ],
+                "人類の出現と文明の起こり2": [
+        {
+            question: "紀元前6世紀に孔子が説いた、親子・兄弟などの秩序を大切にし、思いやりの心を持って政治を行うべきだとする教えをなんと言う？",
+            choices: ["仏教", "キリスト教", "儒学", "イスラム教"],
+            correct: 2
+        },
+        {
+            question: "紀元前3世紀に中国を統一した始皇帝は、なんと言う国の王？",
+            choices: ["秦", "隋", "周", "殷"],
+            correct: 0
+        },
+        {
+            question: "始皇帝が北方の遊牧民の侵入を防ぐために修築された建造物は？",
+            choices: ["富士山", "周城", "秦の長城", "万里の長城"],
+            correct: 3
+        },
+              {
+            question: "紀元前4世紀ごろにアレクサンドロス大王が東方に遠征したことで生まれた、ギリシャの文化とオリエントの文化が融合した文化をなんと言う？",
+            choices: ["ヘラクレス", "ヘレニズム", "融合文化", "ギリエント"],
+            correct: 1
+        },
+                    {
+            question: "イタリアの都市国家から出発し、紀元前27年に皇帝が統治する政治(帝政)を始めた国は？",
+            choices: ["ローマ帝国", "バチカン市国", "大日本帝国", "ギリシャ帝国"],
+            correct: 0
+        },
+                          {
+            question: "紀元前5世紀ごろに現れたシャカが説いた教えを何と言う？",
+            choices: ["キリスト教", "イスラム教", "仏教", "ヒンドゥー教"],
+            correct: 2
+        },
+                          {
+            question: "紀元前1世紀にパレスチナ地方でイエスが説いた教えを何と言う？",
+            choices: ["仏教", "キリスト教", "ヒンドゥー教", "イスラム教"],
+            correct: 1
+        },
+                          {
+            question: "ムハンマドが唯一神「アラー」のお告げを受け、7世紀に起こした宗教は？",
+            choices: ["ヒンドゥー教", "イスラム教", "仏教", "キリスト教"],
+            correct: 1
+        }
+    ],
+    "縄文弥生": [
+        {
+            question: "表面に縄目の文様がついた(A)を使うようになった。",
+            choices: ["石器土器", "縄文土器", "弥生土器", "大和土器"],
+            correct: 1
+        },
+        {
+            question: "地面を掘り屋根をかけた(A)に住むようになった。",
+            choices: ["高床住居", "藁の家", "木造の家", "たて穴住居"],
+            correct: 3
+        },
+        {
+            question: "まじないに使う(A)が作られた。",
+            choices: ["土器", "土偶", "銅鏡", "青銅器"],
+            correct: 1
+        },
+              {
+            question: "この時代を何と言う？",
+            choices: ["石器時代", "縄文時代", "古墳時代", "飛鳥時代"],
+            correct: 1
+        },
+        {
+            question: "大陸から(A)を伝え、(B)を使う。",
+            choices: ["A:青銅器B:弥生土器", "A:稲作B:弥生土器", "A:金印B:縄文土器", "A:まじないB:縄文土器"],
+            correct: 1
+        },		
+			{
+            question: "この時代を何と言う？",
+            choices: ["縄文時代", "石器時代", "弥生時代", "縄文時代"],
+            correct: 2
+        },
+						        {
+            question: "この頃の日本は何と呼ばれる？",
+            choices: ["隋", "倭", "魏", "日"],
+            correct: 1
+        },
+        {
+            question: "この頃何個のクニ(国)にわかれていた？",
+            choices: ["50余り", "100余り", "150余り", "200余り"],
+            correct: 1
+        },
+
+                {
+			question: "(A)によると、小国同士の争いが続いたため、(B)の卑弥呼を倭国の女王とした。",
+            choices: ["A:古事記B:遠江国", "A:魏志倭人伝B:魏", "A:魏志倭人伝B:邪馬台国", "A:日本書紀B:遠江国"],
+            correct: 2
+        }
+    ],
+			    "古墳飛鳥": [
+        {
+            question: "四角形と円形を合わせた古墳が作られた。この古墳の名前は？",
+            choices: ["四角円墳", "前方後円墳", "前角後円墳", "円墳"],
+            correct: 1
+        },
+			       	 {
+            question: "古墳が作られたのは何が現れたことを示す？",
+            choices: ["獲加多支鹵大王(ワカタケルオオキミ)", "豪族", "支配者", "権力者"],
+            correct: 1
+        },
+        {
+            question: "大陸から移り住んできた人は？",
+            choices: ["移住民", "移民", "渡来人", "渡人"],
+            correct: 2
+        },
+				{		            question: "渡来人が仏教・儒教と何を教えた？",
+            choices: ["鉄", "埴輪", "須恵器", "文字"],
+            correct: 2
+        },
+              {
+            question: "この時代を何と言う？",
+            choices: ["縄文時代", "石器時代", "古墳時代", "縄文時代"],
+            correct: 2
+        },
+        {
+            question: "南北に分かれていた中国を何が統一した？",
+            choices: ["周", "殷", "隋", "漢"],
+            correct: 2
+        },
+              {
+            question: "渡来人の知識と技術を利用した誰が戦力を伸ばした？",
+            choices: ["中臣氏", "蘇我氏", "厩戸王", "小野妹子"],
+            correct: 1
+        },
+						        {
+			question: "(A)が摂政になり家柄ではなく有能な人を役人に用いる(B)の制度や役人の心得として(C)を定める。",
+            choices: ["A:蘇我氏B:冠位十二階C:十七条の憲法", "A:聖徳太子B:冠位十二階C:十七条の憲法", "A:聖徳太子B:十七条の憲法C:冠位十二階", "A:蘇我氏B:十七条の憲法C:冠位十二階"],
+            correct: 1
+        },
+						        {
+            question: "大和を中心に栄えた宗教文化は？",
+            choices: ["飛鳥文化", "国風文化", "奈良文化", "縄文文化"],
+            correct: 0
+        },
+			        {
+            question: "隋にかわって(A)が統一した。",
+            choices: ["秦", "百済", "中国", "唐"],
+            correct: 3
+        },
+        {
+            question: "小野妹子らを(A)として派遣する。",
+            choices: ["遣唐使", "遣隋使", "遣漢使", "遣新羅使"],
+            correct: 0
+        },
+
+                {
+			question: "(A)は(B)と中臣鎌足とともに倒された。",
+            choices: ["A:蘇我氏B:中大兄皇子", "A:聖徳太子B:中大兄皇子", "A:中大兄皇子B:蘇我氏", "A:聖徳太子B:蘇我氏"],
+            correct: 0
+        },
+			                {
+			question: "何の改革をした？",
+            choices: ["進撃の改新", "大化の改新", "飛鳥の改新", "天皇の改新"],
+            correct: 1
+        },
+						                {
+			question: "倭国は百済に大群を送ったが、(A)で敗れた",
+            choices: ["朝鮮の戦い", "白村江の戦い", "日本海の戦い", "唐百済の戦い"],
+            correct: 1
+        },
+									                {
+			question: "天智天皇の後継をめぐり、(A)が起こり、天武天皇がおおきな勢力を握った。",
+            choices: ["飛鳥の乱", "壬申の戦い", "壬王の乱", "壬申の乱"],
+            correct: 3
+        },
+												                {
+			question: "律令に基づいて政治を行う国家作りを何と言う？",
+            choices: ["律令国家", "大宝律令", "律令政治", "大宝政治"],
+            correct: 0
+        },
+												                {
+			question: "701年に何の法律が定められた？",
+            choices: ["国家律令", "大宝律令", "律令法", "律令政治"],
+            correct: 1
+        },
+												                {
+			question: "中央政府である(A)のもと、地方は国・群・里に分けられ、国試によって治められる。",
+            choices: ["法律", "律令", "朝廷", "天皇"],
+            correct: 2
+        }
+    ],
+    "奈良": [
+        {
+            question: "藤原鎌足と中大兄皇子が倒した人物は？",
+            choices: ["卑弥呼", "蘇我氏", "聖武天皇", "聖徳太子"],
+            correct: 1
+        },
+        {
+            question: "〇〇の改新←何の改新？",
+            choices: ["北条の改新", "白村江の改新", "大化の改新", "進化の改新"],
+            correct: 2
+        }
+    ],
+    "理科": [
+        {
+            question: "二酸化炭素を集める方法は？",
+            choices: ["二酸化マンガンに過酸化水素水", "二酸化マンガンに薄い塩酸", "石灰石に薄い塩酸", "石灰石に過酸化水素水"],
+            correct: 2
+        },
+        {
+            question: "ガスバーナーのネジの名称は？",
+            choices: ["上：ガス調節ネジ、下：空気調節ネジ", "上：酸素調節ネジ、下：水素調節ネジ", "上：水調節ネジ、下：空気調節ネジ", "上：空気調節ネジ、下：ガス調節ネジ"],
+            correct: 3
+        }
+    ]
+};
+
+function selectSubject(subject) {
+    currentSubject = subject;
+    document.getElementById('subject-title').textContent = subject;
+
+    const unitButtons = document.getElementById('unit-buttons');
+    unitButtons.innerHTML = '';
+
+    unitButtons.innerHTML = 
+        `<button onclick="startQuiz('歴史')">スタート</button>`;
+
+    document.getElementById('home-container').style.display = 'none';
+    document.getElementById('subject-container').style.display = 'block';
+}
+
+function startQuiz(quiz) {
+    currentQuiz = quiz;
+    currentQuestion = 0;
+    correctAnswers = 0;
+    incorrectQuestions = [];
+    isRetrying = false;
+    document.getElementById('quiz-subject').textContent = `${currentSubject}: ${quiz}`;
+    document.getElementById('subject-container').style.display = 'none';
+    document.getElementById('quiz-container').style.display = 'block';
+    loadQuestion();
+}
+
+function loadQuestion() {
+    const questionsList = questions[currentSubject];
+    if (!questionsList || questionsList.length === 0) {
+        alert('問題がありません');
+        return;
+    }
+
+    let questionObj;
+    if (isRetrying) {
+        if (currentQuestion >= incorrectQuestions.length) {
+            showResult();
+            return;
+        }
+        questionObj = questionsList[incorrectQuestions[currentQuestion]];
+    } else {
+        if (currentQuestion >= questionsList.length) {
+            showResult();
+            return;
+        }
+        questionObj = questionsList[currentQuestion];
+    }
+
+    document.getElementById('question').textContent = questionObj.question;
+    const choiceButtons = document.querySelectorAll('.choices .choice');
+    questionObj.choices.forEach((choice, index) => {
+        choiceButtons[index].textContent = choice;
+        choiceButtons[index].classList.remove('disabled');
+        choiceButtons[index].style.backgroundColor = '#ddd';
+    });
+
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('result-container').textContent = '';
+
+    updateProgressBar();
+}
+
+function checkAnswer(selectedIndex) {
+    const questionObj = questions[currentSubject][isRetrying ? incorrectQuestions[currentQuestion] : currentQuestion];
+    const choiceButtons = document.querySelectorAll('.choices .choice');
+    const correctIndex = questionObj.correct;
+
+    const resultContainer = document.getElementById('result-container');
+			    const answerbg = document.getElementById('answerbg');
+			    const answersection = document.getElementById('answersection');
+    const resultImage = document.getElementById('result-image'); // 画像を表示するための要素
+    const resultSound = document.getElementById('result-sound'); // サウンドを再生するための要素
+
+    if (selectedIndex === correctIndex) {
+        resultContainer.textContent = '正解';
+        correctAnswers++;
+        choiceButtons[selectedIndex].style.backgroundColor = 'white';
+				    answerbg.style.display = 'block';
+	    answersection.style.display = 'block';
+        // 正解の画像を表示
+        resultImage.src = 'img/正解.png'; // 正解の画像ファイルパス
+        resultImage.style.display = 'block';
+
+        // 正解のサウンドを再生
+        resultSound.src = 'audio/正解.mp3'; // 正解のサウンドファイルパス
+        resultSound.play();
+
+    } else {
+        resultContainer.textContent = '不正解';
+        if (!isRetrying && !incorrectQuestions.includes(currentQuestion)) {
+            incorrectQuestions.push(currentQuestion);
+        }
+        choiceButtons[selectedIndex].style.backgroundColor = 'white';
+			    answerbg.style.display = 'block';
+	    answersection.style.display = 'block';
+        // 不正解の画像を表示
+        resultImage.src = 'img/不正解.png'; // 不正解の画像ファイルパス
+        resultImage.style.display = 'block';
+
+        // 不正解のサウンドを再生
+        resultSound.src = 'audio/不正解.mp3'; // 不正解のサウンドファイルパス
+        resultSound.play();
+    }
+
+    choiceButtons.forEach(button => button.classList.add('disabled'));
+    document.getElementById('next-btn').style.display = 'block';
+}
+
+
+function retryIncorrect() {
+    isRetrying = true;
+    currentQuestion = 0;
+    correctAnswers = 0;
+    document.querySelectorAll('.choices .choice').forEach(button => {
+        button.classList.remove('disabled');
+        button.style.backgroundColor = '#ddd';
+    });
+
+    document.getElementById('result-screen').style.display = 'none';
+    document.getElementById('quiz-container').style.display = 'block';
+    loadQuestion();
+}
+
+function nextQuestion() {
+			            // 画像とサウンドをリセット
+     		const answerbg = document.getElementById('answerbg');
+		    const answersection = document.getElementById('answersection');
+            const resultImage = document.getElementById('result-image');
+            const resultSound = document.getElementById('result-sound');
+            answersection.style.display = 'none';  // ポップアップを非表示変更
+            answerbg.style.display = 'none';  // ポップアップ背景を非表示変更
+            resultImage.style.display = 'none';  // 画像を非表示にする
+            resultSound.pause();                 // サウンドを停止する
+            resultSound.currentTime = 0;         // サウンドの再生位置をリセット
+    currentQuestion++;
+    const totalQuestions = isRetrying ? incorrectQuestions.length : questions[currentSubject].length;
+    if (currentQuestion >= totalQuestions) {
+        showResult();
+    } else {
+        loadQuestion();
+    }
+}
+
+function confirmShowResult() {
+    if (confirm("結果を表示しますか？")) {
+        showResult();
+    }
+}
+
+function showAnswer() {
+    const questionObj = questions[currentSubject][isRetrying ? incorrectQuestions[currentQuestion] : currentQuestion];
+    alert(`正解: ${questionObj.choices[questionObj.correct]}`);
+}
+
+function showResult() {
+    document.getElementById('quiz-container').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'block';
+
+    const totalQuestions = isRetrying ? incorrectQuestions.length : questions[currentSubject].length;
+    const correctRate = Math.min((correctAnswers / totalQuestions) * 100, 100);
+    document.getElementById('score').textContent = `正解率: ${correctRate.toFixed(2)}%`;
+
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+    const ctx = document.getElementById('score-chart').getContext('2d');
+    chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['正解', '不正解'],
+            datasets: [{
+                data: [correctAnswers, totalQuestions - correctAnswers],
+                backgroundColor: ['#28a745', '#dc3545']
+            }]
+        }
+    });
+
+    document.getElementById('retry-btn').style.display = incorrectQuestions.length ? 'block' : 'none';
+}
+
+function updateProgressBar() {
+    const totalQuestions = isRetrying ? incorrectQuestions.length : questions[currentSubject].length;
+    const completedQuestions = isRetrying ? currentQuestion : currentQuestion + 1;
+    const progressPercentage = (completedQuestions / totalQuestions) * 100;
+    document.getElementById('progress-bar').style.width = progressPercentage + '%';
+    document.getElementById('remaining-questions').textContent = totalQuestions - completedQuestions;
+}
+
+function goBackToTop() {
+    document.getElementById('result-screen').style.display = 'none';
+    document.getElementById('home-container').style.display = 'block';
+}
+			
+
+</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script>
+			$(function () {
+  $('.ac-parent').on('click', function () {
+    $(this).next().slideToggle();
+    //openクラスをつける
+    $(this).toggleClass("open");
+    //クリックされていないac-parentのopenクラスを取る
+    $('.ac-parent').not(this).removeClass('open');
+
+    // 一つ開くと他は閉じるように
+    $('.ac-parent').not($(this)).next('.ac-child').slideUp();
+  });
+});
+			</script>
+
+
+        </main>
+
+</body>
+</html>
