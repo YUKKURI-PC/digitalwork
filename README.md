@@ -15,4 +15,6 @@ Future updates will support questions from first-year elementary school students
 今後のアップデートで小学1年生の問題から中学3年生までの問題に対応予定。
 
 問題に間違いがあったら
-https://forms.gle/FWNhhseGVFSePsxWA までお願いします。
+https://forms.gle/FWNhhseGVFSePsxWA 
+
+までお願いします。
