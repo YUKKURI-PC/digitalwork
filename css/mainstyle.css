@@ -44,7 +44,7 @@
 			button {
   color: var(--main-text);
   background-color: var(--main-btn) !important;
-  transition: .3s;
+  transition: .1s;
 				max-width:80%;
 				border: none !important;
 				  outline: none;
