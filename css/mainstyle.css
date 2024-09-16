@@ -112,7 +112,7 @@ fadeOut {
 }
 .header-image {
     max-width: 50px; /* 画像の最大幅を指定 */
-    height: auto; /* 画像のアスペクト比を維持 */
+    height: 50px; /* 画像のアスペクト比を維持 */
     padding: 5px;
 }
 
