@@ -5,12 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>でじたるわーく</title>
+		    <meta http-equiv="Cache-Control" content="no-store">
     <link rel="stylesheet" href="css/mainstyle.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="javascript/mainscript.js"></script>
-    <script src="javascript/script2.js"></script>
+		    <script src="javascript/mainscript.js"></script>
+		    <link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png" sizes="180x180">
+		 <link rel="manifest" href="manifest.json">
+		 <script>
+    const CACHE_NAME = 'pwa-sample-caches-v1';
+    // Cache targets
+    const urlsToCache = ['/'];
+
+    self.addEventListener('install', (event) => {
+      event.waitUntil(
+        caches
+          .open(CACHE_NAME)
+          .then((cache) => {
+            return cache.addAll(urlsToCache);
+          })
+      );
+    });
+
+    self.addEventListener('fetch', (event) => {
+      event.respondWith(
+        caches
+          .match(event.request)
+          .then((response) => {
+            return response ? response : fetch(event.request);
+          })
+      );
+    });
+  </script>
+		        <script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/4-1-4/js/4-1-4.js"></script>
+    <script>
+        
+
+//logoの表示
+$(window).on('load',function(){
+    $("#splash").delay(1500).fadeOut('slow');//ローディング画面を1.5秒（1500ms）待機してからフェードアウト
+    $("#splash_logo").delay(1200).fadeOut('slow');//ロゴを1.2秒（1200ms）待機してからフェードアウト
+});
+</script>  
 </head>
 <body>
+		      <div class="loading">
+    <img class="loading__logo" src="icon.png">
+</div>
       <header>
         <div class="header-content">
             <h1 id="quiz-subject" class="title">&nbsp;でじたるわーく</h1>&nbsp;    
@@ -41,14 +82,14 @@
     <dd class="ac-child">More to come</dd>
 								<dt class="ac-parent" style="background-color:#333 !important;color:#fff !important;">技術・家庭</dt>
     <dd class="ac-child">追加予定</dd>
-				<dt class="ac-parent">このサイトについて</dt>
+				<dt class="ac-parent">このソフトについて</dt>
     <dd class="ac-child">
 				<br>
 				<h4>でじたるわーく</h4><br>
-				<a>Ver1.0 Preview Beta3</a><br><br>
-				<a>不具合修正・UI変更を行いました。</a><br><br>
+				<a>Ver1.0 Preview Beta4</a><br><br>
+				<a>UI修正・WebAppに対応しました。</a><br><br>
 				<a href="https://forms.gle/FWNhhseGVFSePsxWA">不具合の報告↗︎</a><br><br>
-				<a>©︎ YUKKURIPC</a><br>
+				<a>©︎ Hayato</a><br>
 				<a>©︎ Straight SNS Gloup</a><br>
 				<br>
 				</dd>
@@ -101,10 +142,9 @@
         <button id="retry-btn" onclick="retryIncorrect()">不正解のみやり直し</button>
         <button onclick="goBackToTop()">トップに戻る</button>
     </div>
-
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-				$(function () {
+		<script>
+			$(function () {
   $('.ac-parent').on('click', function () {
     $(this).next().slideToggle();
     //openクラスをつける
@@ -116,7 +156,8 @@
     $('.ac-parent').not($(this)).next('.ac-child').slideUp();
   });
 });
-</script>
+			</script>
+
 
         </main>
 
