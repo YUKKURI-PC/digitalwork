@@ -153,30 +153,16 @@ $(window).on('load',function(){
         <button onclick="goBackToTop()">トップに戻る</button>
     </div>
 		<script>
-			        let deferredPrompt;
-			        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault(); // 自動プロンプトを防止
-            deferredPrompt = e;
+        let deferredPrompt;
 
-            document.getElementById('installApp').style.display = 'block'; // ボタン表示
-        });
-
-        document.getElementById('installApp').addEventListener('click', () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt(); // インストールプロンプト表示
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('ユーザーがインストールを許可しました');
-                    } else {
-                        console.log('ユーザーがインストールを拒否しました');
-                    }
-                    deferredPrompt = null;
-                });
-            }
-        });
-			        // iPhoneを判定する関数
+        // iPhoneを判定する関数
         function isIphone() {
             return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        }
+
+        // Androidを判定する関数
+        function isAndroid() {
+            return /Android/i.test(navigator.userAgent);
         }
 
         // ポップアップを表示する関数
@@ -185,10 +171,32 @@ $(window).on('load',function(){
             popup.style.display = 'block';
         }
 
-        // iPhoneかどうかを判定して、iPhoneならポップアップを表示
-        if (isIphone()) {
-            showIphonePopup();
-        }
+        // インストールプロンプト表示用
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();  // 自動プロンプトを抑制
+            deferredPrompt = e;
+        });
+
+        // ボタン押下時の処理
+        document.getElementById('installApp').addEventListener('click', () => {
+            if (isIphone()) {
+                // iPhoneの場合、ポップアップを表示
+                showIphonePopup();
+            } else if (isAndroid() && deferredPrompt) {
+                // Androidの場合、インストールプロンプトを表示
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('ユーザーがPWAをインストールしました');
+                    } else {
+                        console.log('ユーザーがインストールをキャンセルしました');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                alert('このデバイスではインストールできません');
+            }
+        });
 
         // ポップアップを閉じるボタン
         document.getElementById('closePopup').addEventListener('click', function() {
