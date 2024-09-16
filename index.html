@@ -155,11 +155,15 @@ $(window).on('load',function(){
 		<script>
         let deferredPrompt;
 
-        // iPhoneを判定する関数
-       function isIphoneOrIpad() {
-       return /iPhone|iPad|iPod/i.test(navigator.userAgent);
-       }
-
+        function isIphone() {
+            return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        }
+        function isIpad() {
+            return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        }
+        function isIpod() {
+            return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+	}
         // Androidを判定する関数
         function isAndroid() {
             return /Android/i.test(navigator.userAgent);
