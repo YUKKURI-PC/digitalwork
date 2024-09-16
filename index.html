@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>でじたるわーく</title>
 		    <meta http-equiv="Cache-Control" content="no-store">
-	<meta name="description" content="小学1年生から中学3年生までの問題をスマホで復習・予習ができます。※開発中" />
     <link rel="stylesheet" href="css/mainstyle.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		    <script src="javascript/mainscript.js"></script>
@@ -55,9 +54,8 @@ $(window).on('load',function(){
 </div>
       <header>
         <div class="header-content">
-        <img src="icon.png" class="header-image">&nbsp;
-            <h1 id="quiz-subject" class="title">&nbsp;</h1>&nbsp;    
-            <p class="update-date">&nbsp;Ver1.0 Preview Beta4</p>
+            <h1 id="quiz-subject" class="title">&nbsp;でじたるわーく</h1>&nbsp;    
+            <p class="update-date">&nbsp;Ver1.0 Preview Beta3</p>
         </div>
     </header>
         <main>
@@ -84,6 +82,10 @@ $(window).on('load',function(){
     <dd class="ac-child">More to come</dd>
 								<dt class="ac-parent" style="background-color:#333 !important;color:#fff !important;">技術・家庭</dt>
     <dd class="ac-child">追加予定</dd>
+				    <dt class="ac-parent" style="background-color:#f97148 !important;color:#fff !important;">その他</dt>
+								<dd class="ac-child"><ui style="background-color:#6e6e6e">
+<li><button id="installApp" class="btn_menu">Webアプリをインストール</button></li>
+<li><button id="clearCache" class="btn_menu">このAppのキャッシュをクリア</button></li></ui></dd>
 				<dt class="ac-parent">このソフトについて</dt>
     <dd class="ac-child">
 				<br>
@@ -144,6 +146,43 @@ $(window).on('load',function(){
         <button id="retry-btn" onclick="retryIncorrect()">不正解のみやり直し</button>
         <button onclick="goBackToTop()">トップに戻る</button>
     </div>
+		<script>
+			        let deferredPrompt;
+			        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); // 自動プロンプトを防止
+            deferredPrompt = e;
+
+            document.getElementById('installApp').style.display = 'block'; // ボタン表示
+        });
+
+        document.getElementById('installApp').addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt(); // インストールプロンプト表示
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('ユーザーがインストールを許可しました');
+                    } else {
+                        console.log('ユーザーがインストールを拒否しました');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        });
+			        document.getElementById('clearCache').addEventListener('click', () => {
+            if ('caches' in window) {
+                caches.keys().then(cacheNames => {
+                    cacheNames.forEach(cacheName => {
+                        caches.delete(cacheName);
+                    });
+                }).then(() => {
+                    alert('キャッシュがクリアされました！');
+                    location.reload(); // キャッシュをクリア後にページをリロード
+                });
+            } else {
+                alert('キャッシュAPIがサポートされていません。');
+            }
+        });
+			</script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<script>
 			$(function () {
