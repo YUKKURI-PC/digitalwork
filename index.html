@@ -101,7 +101,12 @@ $(window).on('load',function(){
   </dl>
 
     </div>
-
+    <div id="iphonePopup">
+        <p>このWebアプリをホーム画面に追加するには、<br>
+        Safariの共有アイコン <img src="share-icon.png" alt="共有アイコン" style="height: 20px;"> をタップして<br>
+        「ホーム画面に追加」を選んでください。</p>
+        <button id="closePopup">閉じる</button>
+    </div>
     <div id="subject-container" class="screen" style="display:none;">
 			<br>
         <h1 id="subject-title">選択した教科</h1>
@@ -168,6 +173,26 @@ $(window).on('load',function(){
                     deferredPrompt = null;
                 });
             }
+        });
+			        // iPhoneを判定する関数
+        function isIphone() {
+            return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        }
+
+        // ポップアップを表示する関数
+        function showIphonePopup() {
+            const popup = document.getElementById('iphonePopup');
+            popup.style.display = 'block';
+        }
+
+        // iPhoneかどうかを判定して、iPhoneならポップアップを表示
+        if (isIphone()) {
+            showIphonePopup();
+        }
+
+        // ポップアップを閉じるボタン
+        document.getElementById('closePopup').addEventListener('click', function() {
+            document.getElementById('iphonePopup').style.display = 'none';
         });
 			        document.getElementById('clearCache').addEventListener('click', () => {
             if ('caches' in window) {
