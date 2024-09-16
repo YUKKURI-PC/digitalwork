@@ -100,7 +100,6 @@
             margin-top: 20px;
             padding: 20px 30px;
             background-color: #28a745;
-            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -114,7 +113,6 @@
         #result-container {
             margin-top: 20px;
             font-size: 18px;
-            color: white;
         }
 
         #result-container img {
@@ -170,8 +168,8 @@
 				max-width:80%;
 			}
 			#answersection {
-				  color: var(--main-text);
-			      background-color: var(--main-bg);
+  color: var(--main-text);
+  background-color: var(--main-bg);
   position: fixed;
   top: 50%;
   left: 50%;
@@ -290,4 +288,4 @@
 				justify-content: center;
 			}
 			
-		
+			
