@@ -147,8 +147,6 @@ fadeOut {
         #next-btn {
             margin-top: 20px;
             padding: 20px 30px;
-            background-color: #28a745;
-            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -162,7 +160,6 @@ fadeOut {
         #result-container {
             margin-top: 20px;
             font-size: 18px;
-            color: white;
         }
 
         #result-container img {
