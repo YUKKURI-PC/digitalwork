@@ -36,6 +36,7 @@
           })
       );
     });
+			 
   </script>
 		        <script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/4-1-4/js/4-1-4.js"></script>
     <script>
@@ -175,7 +176,7 @@ $(window).on('load',function(){
                         caches.delete(cacheName);
                     });
                 }).then(() => {
-                    alert('キャッシュがクリアされました！');
+                    alert('キャッシュクリアに成功したため、リロードします。');
                     location.reload(); // キャッシュをクリア後にページをリロード
                 });
             } else {
