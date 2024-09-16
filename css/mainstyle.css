@@ -110,7 +110,7 @@ fadeOut {
     font-size: 1.5em;
 }
 .header-image {
-    max-width: 30px; /* 画像の最大幅を指定 */
+    max-width: 50px; /* 画像の最大幅を指定 */
     height: auto; /* 画像のアスペクト比を維持 */
     padding: 10px;
 }
@@ -118,7 +118,7 @@ fadeOut {
 .update-date {
     margin: 0;
     font-size: 0.9em;
-        padding-top:5px;
+        padding-top:25px;
 }
         .screen {
             text-align: center;
