@@ -103,7 +103,7 @@ $(window).on('load',function(){
     </div>
     <div id="iphonePopup">
         <p>このWebアプリをホーム画面に追加するには、<br>
-        Safariの共有アイコン <img src="share-icon.png" alt="共有アイコン" style="height: 20px;"> をタップして<br>
+<img src="https://yk.rsw.jp/image/2024/media/YKsupport/mobile/app/image/iOS.png" alt="共有アイコン" style="height: 20px;"> をタップして<br>
         「ホーム画面に追加」を選んでください。</p>
         <button id="closePopup">閉じる</button>
     </div>
@@ -156,9 +156,9 @@ $(window).on('load',function(){
         let deferredPrompt;
 
         // iPhoneを判定する関数
-        function isIphone() {
-            return /iPhone|iPad|iPod/i.test(navigator.userAgent);
-        }
+function isIos() {
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
 
         // Androidを判定する関数
         function isAndroid() {
