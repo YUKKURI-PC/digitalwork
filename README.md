@@ -1,6 +1,7 @@
 Fixes:
 ・UI Fixed
-・Add answering audios&images
+・Release WebApp
+・New Logo
 
 Currently available is history for first-year junior high school students (古墳時代まで).
 Future updates will support questions from first-year elementary school students to third-year junior high school students.
@@ -9,7 +10,8 @@ Future updates will support questions from first-year elementary school students
 
 修正:
 ・UIの修正
-・答え合わせ時の音と画像の追加
+・WebAppをリリース
+・ロゴを追加
 
 現在中学1年生歴史(古墳時代まで)利用可。
 今後のアップデートで小学1年生の問題から中学3年生までの問題に対応予定。
