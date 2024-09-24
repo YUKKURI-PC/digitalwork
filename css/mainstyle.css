@@ -34,19 +34,19 @@
     background-position: center;
     transition: opacity 1s ease-in-out;
     opacity: 0;
-    filter: blur(5px);
+    filter: blur(40px);
 	    opacity: 0; /* 初期状態は透明 */
     z-index: -1;
 }
 
 .light-mode {
     background-image: url('light-image1.jpg'); /* ライトモードの画像 */
-    filter: blur(5px);
+    filter: blur(40px);
 }
 
 .dark-mode {
     background-image: url('dark-image1.jpg'); /* ダークモードの画像 */
-    filter: blur(5px);
+    filter: blur(40px);
 }
 
 button {
