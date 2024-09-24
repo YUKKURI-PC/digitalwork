@@ -126,9 +126,9 @@ hr {
 }
 
             header{
-        background-color: rgb(0 0 106 / 61%);
-        backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+        -webkit-backdrop-filter:saturate(180%) blur(20px);
+        backdrop-filter: saturate(180%) blur(20px);
+        background-color: rgba(255,255,255,.72)
         color:#fff;
  position: fixed;
   top: 0;
