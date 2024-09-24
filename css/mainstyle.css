@@ -2,12 +2,14 @@
   --main-text: #333;
   --main-bg: #f4f4f4;
   --main-btn: #F2F2F2;	
+				--main-header:rgba(255,255,255,.72);
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --main-text: #ddd;
     --main-bg: #333;
   --main-btn: #F2F2F2;	
+	  --main-header:rgba(29, 29, 31, 0.72);
 	  --main-btn: #6e6e6e;				
   }
 }
@@ -128,8 +130,8 @@ hr {
             header{
         -webkit-backdrop-filter:saturate(180%) blur(20px);
         backdrop-filter: saturate(180%) blur(20px);
-        background-color: rgba(255,255,255,.72)
-        color:#fff;
+            color: var(--main-text);
+            background-color: var(--main-header);
  position: fixed;
   top: 0;
   z-index: 999;
