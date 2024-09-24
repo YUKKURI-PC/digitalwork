@@ -326,7 +326,7 @@ function changeBackground() {
         setTimeout(() => {
             currentIndex = (currentIndex + 1) % currentImages.length;
             backgroundDiv.style.backgroundImage = `url('${currentImages[currentIndex]}')`;
-            backgroundDiv.style.opacity = 0; // フェードイン
+            backgroundDiv.style.opacity = 1; // フェードイン
         }, 1000); // フェードアウト時間と同じ
     }, 5000); // 画像切替のインターバル
 }
