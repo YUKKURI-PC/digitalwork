@@ -327,7 +327,7 @@ function changeBackground() {
             currentIndex = (currentIndex + 1) % currentImages.length;
             backgroundDiv.style.backgroundImage = `url('${currentImages[currentIndex]}')`;
             backgroundDiv.style.opacity = 5; // フェードイン
-        }, 1000); // フェードアウト時間と同じ
+        }, 5000); // フェードアウト時間と同じ
     }, 10000); // 画像切替のインターバル
 }
 
@@ -349,7 +349,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
             currentImages = imagesLight; // 現在の画像リストをライトモードの画像に設定
         }
         changeBackground(); // 画像を変更
-    }, 1000); // フェードアウト後に変更
+    }, 100); // フェードアウト後に変更
 });
 
 
