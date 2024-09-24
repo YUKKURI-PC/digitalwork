@@ -322,7 +322,7 @@ function changeBackground() {
     backgroundDiv.style.backgroundImage = `url('${currentImages[currentIndex]}')`;
     backgroundDiv.style.opacity = 1; // 最初の表示は透明にしない
     setInterval(() => {
-        backgroundDiv.style.opacity = 0; // フェードアウト
+        backgroundDiv.style.opacity = 1; // フェードアウト
         setTimeout(() => {
             currentIndex = (currentIndex + 1) % currentImages.length;
             backgroundDiv.style.backgroundImage = `url('${currentImages[currentIndex]}')`;
