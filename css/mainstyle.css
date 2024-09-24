@@ -36,6 +36,8 @@
     opacity: 0;
 	        -webkit-backdrop-filter:saturate(180%) blur(20px);
         backdrop-filter: saturate(180%) blur(20px);
+	    opacity: 0; /* 初期状態は透明 */
+    z-index: -1;
 }
 
 .light-mode {
