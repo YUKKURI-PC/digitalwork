@@ -48,7 +48,10 @@
     background-image: url('dark-image1.jpg'); /* ダークモードの画像 */
     filter: blur(40px);
 }
-
+.quizbg{
+	            color: var(--main-text);
+            background-color: var(--main-bg);
+}
 button {
     font-size: 14px;
 }
