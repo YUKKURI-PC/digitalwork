@@ -53,7 +53,7 @@ button {
     animation: slideUp 0.3s ease forwards;
     overflow: hidden;
 		z-index:1000;
-	color:white;
+	color:Black;
 }
 
 .popup-header {
