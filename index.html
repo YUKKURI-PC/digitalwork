@@ -299,26 +299,30 @@ const imagesDark = [
 ];
 
 let currentIndex = 0;
+let currentImages = []; // 現在の画像リストを保持
 const backgroundDiv = document.querySelector('.background');
 
 // モードを判別して初期画像を設定
 function setInitialBackground() {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        currentImages = imagesDark;
         backgroundDiv.classList.add('dark-mode');
-        changeBackground(imagesDark);
     } else {
+        currentImages = imagesLight;
         backgroundDiv.classList.add('light-mode');
-        changeBackground(imagesLight);
     }
+    changeBackground();
 }
 
 // 背景画像を変更する関数
-function changeBackground(images) {
+function changeBackground() {
+    backgroundDiv.style.backgroundImage = `url('${currentImages[currentIndex]}')`;
+    backgroundDiv.style.opacity = 1; // 最初の表示は透明にしない
     setInterval(() => {
         backgroundDiv.style.opacity = 0; // フェードアウト
         setTimeout(() => {
-            currentIndex = (currentIndex + 1) % images.length;
-            backgroundDiv.style.backgroundImage = `url('${images[currentIndex]}')`;
+            currentIndex = (currentIndex + 1) % currentImages.length;
+            backgroundDiv.style.backgroundImage = `url('${currentImages[currentIndex]}')`;
             backgroundDiv.style.opacity = 1; // フェードイン
         }, 1000); // フェードアウト時間と同じ
     }, 5000); // 画像切替のインターバル
@@ -335,12 +339,13 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
         if (e.matches) {
             backgroundDiv.classList.remove('light-mode');
             backgroundDiv.classList.add('dark-mode');
-            changeBackground(imagesDark);
+            currentImages = imagesDark; // 現在の画像リストをダークモードの画像に設定
         } else {
             backgroundDiv.classList.remove('dark-mode');
             backgroundDiv.classList.add('light-mode');
-            changeBackground(imagesLight);
+            currentImages = imagesLight; // 現在の画像リストをライトモードの画像に設定
         }
+        changeBackground(); // 画像を変更
     }, 1000); // フェードアウト後に変更
 });
 
