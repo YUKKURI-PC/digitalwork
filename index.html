@@ -285,6 +285,66 @@ popupBackground.addEventListener('click', (e) => {
 });
 
 
+			
+const imagesLight = [
+    'img/background/right/IMG_1238.webp',
+    'img/background/right/IMG_1250.webp',
+    'img/background/right/IMG_1278.webp'
+];
+
+const imagesDark = [
+    'img/background/dark/IMG_1309.webp',
+    'img/background/dark/IMG_1324 (1).webp',
+    'img/background/dark/IMG_1324.webp'
+];
+
+let currentIndex = 0;
+const backgroundDiv = document.querySelector('.background');
+
+// モードを判別して初期画像を設定
+function setInitialBackground() {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        backgroundDiv.classList.add('dark-mode');
+        changeBackground(imagesDark);
+    } else {
+        backgroundDiv.classList.add('light-mode');
+        changeBackground(imagesLight);
+    }
+}
+
+// 背景画像を変更する関数
+function changeBackground(images) {
+    setInterval(() => {
+        backgroundDiv.style.opacity = 0; // フェードアウト
+        setTimeout(() => {
+            currentIndex = (currentIndex + 1) % images.length;
+            backgroundDiv.style.backgroundImage = `url('${images[currentIndex]}')`;
+            backgroundDiv.style.opacity = 1; // フェードイン
+        }, 1000); // フェードアウト時間と同じ
+    }, 5000); // 画像切替のインターバル
+}
+
+// 初期設定
+setInitialBackground();
+
+// モードが変更されたときに背景を更新
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    backgroundDiv.style.opacity = 0; // フェードアウト
+    setTimeout(() => {
+        currentIndex = 0; // インデックスリセット
+        if (e.matches) {
+            backgroundDiv.classList.remove('light-mode');
+            backgroundDiv.classList.add('dark-mode');
+            changeBackground(imagesDark);
+        } else {
+            backgroundDiv.classList.remove('dark-mode');
+            backgroundDiv.classList.add('light-mode');
+            changeBackground(imagesLight);
+        }
+    }, 1000); // フェードアウト後に変更
+});
+
+
 			</script>
 
 
