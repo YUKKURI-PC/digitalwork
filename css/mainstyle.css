@@ -79,7 +79,7 @@ button {
     cursor: pointer !important;
     padding: 0 0 !important;
    border-radius: 0 !important;
- 　　box-shadow: 0px 0px 0px 0px !important;
+ 　　box-shadow: 0 0 0px rgba(0, 0, 0, 0) !important;
 }
 .popup-header button:hover{
 	    position: absolute !important; /* 右上に固定 */
@@ -91,7 +91,7 @@ button {
     cursor: pointer !important;
     padding: 0 0 !important;
    border-radius: 0 !important;
- 　　box-shadow: 0px 0px 0px 0px !important;
+ 　　box-shadow: 0 0 0px rgba(0, 0, 0, 0) !important;
 }
 
 hr {
