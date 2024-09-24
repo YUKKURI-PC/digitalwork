@@ -34,22 +34,19 @@
     background-position: center;
     transition: opacity 1s ease-in-out;
     opacity: 0;
-	        -webkit-backdrop-filter:saturate(180%) blur(20px);
-        backdrop-filter: saturate(180%) blur(20px);
+    filter: blur(5px);
 	    opacity: 0; /* 初期状態は透明 */
     z-index: -1;
 }
 
 .light-mode {
     background-image: url('light-image1.jpg'); /* ライトモードの画像 */
-	        -webkit-backdrop-filter:saturate(180%) blur(20px);
-        backdrop-filter: saturate(180%) blur(20px);
+    filter: blur(5px);
 }
 
 .dark-mode {
     background-image: url('dark-image1.jpg'); /* ダークモードの画像 */
-	        -webkit-backdrop-filter:saturate(180%) blur(20px);
-        backdrop-filter: saturate(180%) blur(20px);
+    filter: blur(5px);
 }
 
 button {
