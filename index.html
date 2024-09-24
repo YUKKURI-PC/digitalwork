@@ -322,11 +322,11 @@ function changeBackground() {
     backgroundDiv.style.backgroundImage = `url('${currentImages[currentIndex]}')`;
     backgroundDiv.style.opacity = 1; // 最初の表示は透明にしない
     setInterval(() => {
-        backgroundDiv.style.opacity = 1; // フェードアウト
+        backgroundDiv.style.opacity = 5; // フェードアウト
         setTimeout(() => {
             currentIndex = (currentIndex + 1) % currentImages.length;
             backgroundDiv.style.backgroundImage = `url('${currentImages[currentIndex]}')`;
-            backgroundDiv.style.opacity = 1; // フェードイン
+            backgroundDiv.style.opacity = 5; // フェードイン
         }, 1000); // フェードアウト時間と同じ
     }, 10000); // 画像切替のインターバル
 }
