@@ -255,7 +255,7 @@ fadeOut {
     font-size: 0.9em;
         padding-top:15px;
 }
-        .screen {
+        #subject-container {
             text-align: center;
 	            color: var(--main-text);
             background-color: var(--main-bg);
