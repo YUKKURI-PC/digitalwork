@@ -448,6 +448,7 @@ function updateProgressBar() {
 
 function goBackToTop() {
     document.getElementById('result-screen').style.display = 'none';
-    document.getElementById('home-container').style.display = 'block';
+	document.getElementById('home-container').style.display = 'block';
+		document.getElementById('quiz-subject').style.display = 'none';
 }
 			

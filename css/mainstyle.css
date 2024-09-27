@@ -34,19 +34,78 @@
     background-position: center;
     transition: opacity 1s ease-in-out;
     opacity: 0;
-    filter: blur(40px);
 	    opacity: 0; /* 初期状態は透明 */
     z-index: -10;
 }
 
 .light-mode {
     background-image: url('light-image1.jpg'); /* ライトモードの画像 */
-    filter: blur(40px);
+    filter: blur(10px);
 }
 
 .dark-mode {
     background-image: url('dark-image1.jpg'); /* ダークモードの画像 */
-    filter: blur(40px);
+    filter: blur(10px);
+}
+.nav {
+    position: relative;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.menu-icon {
+    display: block;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.menu {
+    text-align:center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+}
+
+
+
+.menu li a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+.menu-toggle:checked + .menu-icon + .menu {
+    display: flex;
+}
+
+/* デスクトップ用スタイル */
+@media (min-width: 768px) {
+    .menu-icon {
+        display: none;
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: row;
+        position: static;
+        box-shadow: none;
+    }
+
+    .menu li {
+        border-bottom: none;
+    }
+
+    .menu li a {
+        padding: 10px 15px;
+    }
 }
 
 button {
@@ -175,12 +234,12 @@ hr {
   width: 100vw;
   height: 100vh;
   z-index: 999;
-  background-color: #444;
+            background-color: var(--main-bg);
   display: flex;
   align-items: center;
   justify-content: center;
 	animation: fadeOut 1.5s 2.5s forwards;
-	z-index:1000;
+	z-index:2000;
 }
 
 @keyframes 
@@ -197,19 +256,19 @@ fadeOut {
 }
 .loading__logo {
   opacity: 0;
-  animation: logo_fade 2s 0.5s forwards;
+  animation: logo_fade 2s 0s forwards;
   width: 175px;
 }
 
 @keyframes logo_fade {
   0% {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(20px);
   }
 
   60% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(20px);
   }
 
   100% {
@@ -241,8 +300,9 @@ fadeOut {
 }
 
 .title {
-    margin: 0;
-    font-size: 1.5em;
+	margin: 5%;
+	font-size: 1.5em;
+	white-space: nowrap;
 }
 .header-image {
     max-width: 50px; /* 画像の最大幅を指定 */
@@ -253,7 +313,8 @@ fadeOut {
 .update-date {
     margin: 0;
     font-size: 0.9em;
-        padding-top:15px;
+	padding-top:15px;
+	white-space: nowrap;
 }
         .scbg {
             text-align: center;
