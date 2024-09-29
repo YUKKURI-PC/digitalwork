@@ -69,6 +69,7 @@
     display: none;
     flex-direction: column;
     position: absolute;
+	top:0;
     right: 0;
 }
 
@@ -279,7 +280,6 @@ fadeOut {
             display: flex;
             justify-content: center;
             align-items: center;
-        margin-top: 70px;
 		    z-index:5;
  }
 			button {
