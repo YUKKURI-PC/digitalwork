@@ -1,8 +1,6 @@
 {
   "name": "でじたるわーく",
   "short_name": "でじたるわーく",
-  "theme_color": "#00006a",
-  "background_color": "#00006a",
   "display": "standalone",
   "start_url": "https://yukkuri-pc.github.io/digitalwork/",
   "icons": [
