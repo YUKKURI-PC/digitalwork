@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Maps Clone</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+        .details {
+            margin-top: 10px;
+        }
+        .icon {
+            cursor: pointer;
+            padding: 5px;
+            border: 1px solid #ccc;
+            margin: 2px 0;
+        }
+		    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+        .main {
+            display: flex;
+        }
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+        #controls {
+            display: block;
+            justify-content: center;
+				text-align;center;
+				border: 1px solid rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(20px); /* ぼかしエフェクト */
+  backdrop-filter: blur(20px);
+border-radius: 5px;
+position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+        }
+        #controls input {
+            padding: 10px;
+            width: 60%;
+        }
+        #controls button {
+            padding: 10px 15px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        #routeInstructions {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .search-results {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .search-result-item {
+            padding: 5px;
+            cursor: pointer;
+        }
+        .search-result-item:hover {
+            background-color: #f0f0f0;
+        }
+        .street-view-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 1000; /* 地図の上に表示 */
+        }    #search {
+      margin-bottom: 10px;
+    }
+    #directions {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      display: none; /* 初期は非表示 */
+    }
+    #directions input {
+      width: 45%;
+    }
+    #routeOptions {
+      margin-bottom: 10px;
+      display: none; /* 初期は非表示 */
+				justify-content: center;
+    }
+    #results {
+      margin-top: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+				background-color:#fff;
+				  z-index: 5;
+    }
+    .result-item {
+      border-bottom: 1px solid #ccc;
+      padding: 10px;
+      cursor: pointer; /* ポインターを表示 */
+    }
+    #street-view-button {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
+    #street-view-button:disabled {
+      background-color: #ccc; /* 無効のときの背景色 */
+      cursor: not-allowed;
+    }
+    #street-view {
+      height: 300px;
+      width: 100%;
+      display: none; /* 初期は非表示 */
+    }
+    #instruction {
+      position: absolute;
+      top: 10px;
+      left: 70px;
+      background-color: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+				z-index:999;
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+			<div style="justify-content: center;text-glign:center;"><br>
+				<center>
+    <input type="text" id="search" placeholder="場所を検索" />
+    <button onclick="searchLocation()">検索</button>
+        <button id="get-current-location-button" onclick="getCurrentLocation()">現在地を取得</button>
+    <div id="directions">
+      <input type="text" id="start" placeholder="開始地点 (デフォルト: 現在地)" />
+      <input type="text" id="end" placeholder="終了地点" />
+    </div>
+    <div id="routeOptions">
+      <label><input type="radio" name="routeType" value="walking" checked> 徒歩</label>
+      <label><input type="radio" name="routeType" value="car"> 車</label>
+      <label><input type="radio" name="routeType" value="transit"> 電車</label>
+    </div>
+    <button id="get-directions-button" onclick="getDirections()" style="display: none;">道案内を取得</button> <!-- 初期は非表示 -->
+				</center>
+				</div>
+    <div id="results"></div>
+				
+  </div>
+			</div>
+
+  <div id="map"></div>
+    <div class="street-view-btn" id="streetViewButton">ストリートビュー</div>
+  <div id="street-view"></div>
+  <div id="instruction"></div>
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script>
+    var map = L.map('map').setView([35.682839, 139.759455], 13); // 初期値を東京に設定
+    var markersLayer = new L.LayerGroup();
+    var streetViewVisible = false;
+    var instructionElement = document.getElementById('instruction');
+    var streetViewButton = document.getElementById('street-view-button');
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+    }).addTo(map);
+    map.addLayer(markersLayer);
+
+    var userLat, userLon;
+
+    // ページ読み込み時に現在地を取得
+    window.onload = getCurrentLocation;
+
+    function getCurrentLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          userLat = position.coords.latitude;
+          userLon = position.coords.longitude;
+          map.setView([userLat, userLon], 13);
+          L.marker([userLat, userLon]).addTo(map)
+            .bindPopup("現在地")
+            .openPopup();
+          document.getElementById('start').value = userLat + ',' + userLon; // 現在地を開始地点に設定
+        });
+      } else {
+        alert("このブラウザでは位置情報がサポートされていません。");
+      }
+    }
+
+    // 検索機能
+    function searchLocation() {
+      var query = document.getElementById('search').value;
+      fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + query)
+        .then(response => response.json())
+        .then(data => {
+          markersLayer.clearLayers();
+          document.getElementById('results').innerHTML = '';
+
+          // 結果を近い順にソート
+          data.sort((a, b) => {
+            var distanceA = getDistance(userLat, userLon, a.lat, a.lon);
+            var distanceB = getDistance(userLat, userLon, b.lat, b.lon);
+            return distanceA - distanceB;
+          });
+
+          data.forEach(place => {
+            var lat = place.lat;
+            var lon = place.lon;
+            var name = place.display_name;
+            var item = document.createElement('div');
+            item.className = 'result-item';
+            item.innerHTML = name;
+            item.onclick = function () {
+              map.setView([lat, lon], 13);
+              L.marker([lat, lon]).addTo(map)
+                .bindPopup(name)
+                .openPopup();
+              document.getElementById('end').value = lat + ',' + lon; // 選択した場所を終了地点に設定
+
+              // ボタンを表示
+              document.getElementById('directions').style.display = 'block'; // ルート案内入力エリアを表示
+              document.getElementById('routeOptions').style.display = 'flex'; // ルート選択を表示
+              document.getElementById('get-directions-button').style.display = 'block'; // 道案内ボタンを表示
+              streetViewButton.disabled = false; // ボタンを有効化
+            };
+            document.getElementById('results').appendChild(item);
+          });
+        });
+    }
+
+    // 2点間の距離を計算する関数
+    function getDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // 地球の半径（km）
+      const dLat = (lat2 - lat1) * (Math.PI / 180);
+      const dLon = (lon2 - lon1) * (Math.PI / 180);
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c; // 距離を返す
+    }
+
+    // 経路案内
+    function getDirections() {
+      var start = document.getElementById('start').value;
+      var end = document.getElementById('end').value;
+              document.getElementById('controls').style.display = 'none'; // コントロールエリアを非表示
+      var routeType = document.querySelector('input[name="routeType"]:checked').value;
+
+      // 経路を取得
+      var startCoords = start.split(',').map(Number);
+      var endCoords = end.split(',').map(Number);
+
+      if (routeType === 'walking') {
+        // 徒歩の経路取得
+        fetch(`https://router.project-osrm.org/route/v1/walking/${startCoords[1]},${startCoords[0]};${endCoords[1]},${endCoords[0]}?overview=full&geometries=geojson`)
+          .then(response => response.json())
+          .then(data => {
+            handleRouteResponse(data);
+          })
+          .catch(error => console.error('Error fetching walking directions:', error));
+      } else if (routeType === 'car') {
+        // 車の経路取得
+        fetch(`https://router.project-osrm.org/route/v1/driving/${startCoords[1]},${startCoords[0]};${endCoords[1]},${endCoords[0]}?overview=full&geometries=geojson`)
+          .then(response => response.json())
+          .then(data => {
+            handleRouteResponse(data);
+          })
+          .catch(error => console.error('Error fetching driving directions:', error));
+      } else if (routeType === 'transit') {
+        // 電車の経路取得（TransitLandを使う例）
+        fetch(`https://api.transit.land/v1/routers?lat=${startCoords[0]}&lon=${startCoords[1]}`)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data); // ここでデータを処理
+          })
+          .catch(error => console.error('Error fetching transit directions:', error));
+      }
+    }
+
+    // 経路取得後の処理
+    function handleRouteResponse(data) {
+      markersLayer.clearLayers(); // マーカーをクリア
+
+      if (data.routes.length > 0) {
+        var route = data.routes[0];
+        var geoJsonLayer = L.geoJSON(route.geometry).addTo(map);
+        map.fitBounds(geoJsonLayer.getBounds());
+
+        // 到着予想時刻の計算
+        var duration = route.duration; // 経路の所要時間（秒）
+        var arrivalTime = new Date(Date.now() + duration * 1000); // 現在の時刻に所要時間を足す
+
+        instructionElement.innerHTML = `
+          <strong>到着予想時刻:</strong> ${arrivalTime.toLocaleTimeString()}<br>
+          <strong>所要時間:</strong> ${Math.floor(duration / 60)}分`;
+      } else {
+        instructionElement.innerHTML = '経路が見つかりませんでした。';
+      }
+    }
+
+        // ストリートビューボタンの機能
+        document.getElementById('streetViewButton').addEventListener('click', () => {
+            const currentLocation = map.getCenter();
+            const lat = currentLocation.lat;
+            const lon = currentLocation.lng;
+            window.open(`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}`, '_blank');
+        });
+  </script>
+</body>
+</html>
