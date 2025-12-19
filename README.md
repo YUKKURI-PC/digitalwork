@@ -1,4 +1,5 @@
 # DigitalWork PreviewBeta4
+開発終了
 
 Fixes:<br>
 ・UI Fixed<br>
